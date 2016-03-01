@@ -1,0 +1,40 @@
+{
+  "name": "gulp-assets-incremental-update",
+  "version": "0.1.0",
+  "description": "A gulp plugin for assets incremental update.",
+  "keywords": [
+    "gulpplugin",
+    "assets",
+    "incremental",
+    "update"
+  ],
+  "homepage": "https://github.com/alexayan/gulp-assets-incremental-update",
+  "bugs": "https://github.com/alexayan/gulp-assets-incremental-update/issues",
+  "author": {
+    "name": "yanSun",
+    "url": "https://github.com/alexayan"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alexayan/gulp-assets-incremental-update.git"
+  },
+  "scripts": {
+    "test": "mocha test.js"
+  },
+  "dependencies": {
+    "gulp-util": "^2.2.14",
+    "gulp-zip": "^3.2.0",
+    "node-folder-diff": "^1.3.0",
+    "q": "^1.4.1",
+    "through2": "^0.4.2"
+  },
+  "devDependencies": {
+    "mocha": "^1.19.0",
+    "chai": "^1.9.1"
+  },
+  "engines": {
+    "node": ">=0.9"
+  },
+  "license": "MIT"
+}
