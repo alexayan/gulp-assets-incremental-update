@@ -66,26 +66,33 @@ function genDiffTasks(folder, version, basename){
     return tasks;
 }
 
-function genVersion(config_path, readOnly){
+function genVersion(config_path, name){
+	var config;
     if(fs.existsSync(config_path) ) {
         var content = fs.readFileSync(config_path, {
             encoding : 'utf8'
         });
-        var config = JSON.parse(content);
-        if(readOnly){
-            return config.Last_version;
-        }
-        config.Last_version++;
-        fs.writeFileSync(config_path, JSON.stringify(config));
-        return config.Last_version
+        config = JSON.parse(content);
+    }else{
+    	config = {};
     }
+    if(!config[name]){
+    	config[name] = {
+    		cur_version : 1,
+    		Last_version : 0
+    	};
+    }
+    config[name].Last_version++;
+    fs.writeFileSync(config_path, JSON.stringify(config));
+    return config[name].Last_version;
 }
 
 function assets_incremental_update(gulp, config){
 	if(!config.config_path || !config.publish_folder || !config.name || !config.assets_folder){
 		throw new Error('must provide config_path, publish_folder, name, assets_folder in config options');
 	}
-	var version = genVersion(config.config_path);
+	var config_path = path.resolve(config.publish_folder, './config.json');
+	var version = genVersion(config_path, config.name);
 	gulp.task('assets-incremental-update', function(){
 	    var zip = require('gulp-zip'),
 	        assets_incremental_update = require('gulp-assets-incremental-update');
@@ -97,8 +104,6 @@ function assets_incremental_update(gulp, config){
 	            name : config.name,
 	            version : version
 	        }));
-	    gulp.src(config.config_path)
-         	.pipe(gulp.dest(config.publish_folder));
 	});
 	return incremental_update({
 		publish_folder : config.publish_folder,
