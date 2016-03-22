@@ -92,8 +92,8 @@ function assets_incremental_update(gulp, config){
 		throw new Error('must provide config_path, publish_folder, name, assets_folder in config options');
 	}
 	var config_path = path.resolve(config.publish_folder, './config.json');
-	var version = genVersion(config_path, config.name);
 	gulp.task('assets-incremental-update', function(){
+		var version = genVersion(config_path, config.name);
 	    var zip = require('gulp-zip'),
 	        assets_incremental_update = require('gulp-assets-incremental-update');
 	   	gulp.src(config.assets_folder+'/**')
@@ -105,11 +105,7 @@ function assets_incremental_update(gulp, config){
 	            version : version
 	        }));
 	});
-	return incremental_update({
-		publish_folder : config.publish_folder,
-	    name : config.name,
-	    version : version
-	});
+	return incremental_update;
 }
 
 
