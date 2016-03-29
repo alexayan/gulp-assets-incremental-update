@@ -66,7 +66,7 @@ function genDiffTasks(folder, version, basename){
     return tasks;
 }
 
-function genVersion(config_path, name){
+function genVersion(config_path, name, base_url){
 	var config;
     if(fs.existsSync(config_path) ) {
         var content = fs.readFileSync(config_path, {
@@ -74,26 +74,26 @@ function genVersion(config_path, name){
         });
         config = JSON.parse(content);
     }else{
-    	config = {};
-    }
-    if(!config[name]){
-    	config[name] = {
+    	config = {
+    		file_name : name,
     		cur_version : 1,
-    		Last_version : 0
+    		Last_version : 0,
+    		test_version : 1,
+    		base_url : base_url
     	};
     }
-    config[name].Last_version++;
+    config.Last_version++;
     fs.writeFileSync(config_path, JSON.stringify(config));
-    return config[name].Last_version;
+    return config.Last_version;
 }
 
 function assets_incremental_update(gulp, config){
-	if(!config.config_path || !config.publish_folder || !config.name || !config.assets_folder){
-		throw new Error('must provide config_path, publish_folder, name, assets_folder in config options');
+	if(!config.publish_folder || !config.name || !config.assets_folder || !config.base_url){
+		throw new Error('must provide publish_folder, name, assets_folder, base_url in config options');
 	}
 	var config_path = path.resolve(config.publish_folder, './config.json');
 	gulp.task('assets-incremental-update', function(){
-		var version = genVersion(config_path, config.name);
+		var version = genVersion(config_path, config.name, config.base_url);
 	    var zip = require('gulp-zip'),
 	        assets_incremental_update = require('gulp-assets-incremental-update');
 	   	gulp.src(config.assets_folder+'/**')
