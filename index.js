@@ -17,7 +17,7 @@ function incremental_update(options){
       		cb();
 		}
 		var version = options.version,
-			tasks = genDiffTasks(options.publish_folder, version, options.name),
+			tasks = genDiffTasks(options.publish_folder, version, options.name, options.limit),
 			q_tasks = [];
 		try{
 			for(var i=0, len=tasks.length; i<len; i++){
@@ -50,7 +50,7 @@ function incremental_update(options){
 	});
 }
 
-function genDiffTasks(folder, version, basename){
+function genDiffTasks(folder, version, basename, limit){
     function genPath(folder, version, basename){
         return path.resolve(folder, './'+version + '/'+basename);
     }
@@ -59,7 +59,11 @@ function genDiffTasks(folder, version, basename){
     }
     var tasks = [];
     version = parseInt(version);
-    for(var i=1; i<version; i++){
+    var i = 1;
+    if(limit && !isNaN(parseInt(limit))){
+    	i = Math.max(1, version-parseInt(limit));
+    }
+    for(; i<version; i++){
         tasks.push([genPath(folder, i, basename), genPath(folder, version, basename), genDestPath(folder, i, version, basename)]);
         tasks.push([genPath(folder, version, basename), genPath(folder, i, basename), genDestPath(folder, version, i, basename)]);
     }
@@ -102,7 +106,8 @@ function assets_incremental_update(gulp, config){
 	        .pipe(incremental_update({
 	            publish_folder : config.publish_folder,
 	            name : config.name,
-	            version : version
+	            version : version,
+	            limit : config.limit
 	        }));
 	});
 	return incremental_update;
