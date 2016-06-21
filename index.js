@@ -91,26 +91,34 @@ function genVersion(config_path, name, base_url){
     return config.Last_version;
 }
 
-function assets_incremental_update(gulp, config){
-	if(!config.publish_folder || !config.name || !config.assets_folder || !config.base_url){
-		throw new Error('must provide publish_folder, name, assets_folder, base_url in config options');
+function assets_incremental_update(gulp, configs){
+	var config;
+	if(!configs.slice){
+		configs = [configs];
 	}
-	var config_path = path.resolve(config.publish_folder, './config.json');
-	gulp.task('assets-incremental-update', function(){
-		var version = genVersion(config_path, config.name, config.base_url);
-	    var zip = require('gulp-zip'),
-	        assets_incremental_update = require('gulp-assets-incremental-update');
-	   	gulp.src(config.assets_folder+'/**')
-	        .pipe(zip(config.name))
-	        .pipe(gulp.dest(config.publish_folder+'/'+version))
-	        .pipe(incremental_update({
-	            publish_folder : config.publish_folder,
-	            name : config.name,
-	            version : version,
-	            limit : config.limit
-	        }));
-	});
-	return incremental_update;
+	for(var i=0,len=configs.length; i<len; i++){
+		config = configs[i];
+		(function(config){
+			if(!config.publish_folder || !config.name || !config.assets_folder || !config.base_url){
+				throw new Error('must provide publish_folder, name, assets_folder, base_url in config options');
+			}
+			var config_path = path.resolve(config.publish_folder, './config.json');
+			gulp.task(config.task_name || 'assets-incremental-update', function(){
+				var version = genVersion(config_path, config.name, config.base_url);
+			    var zip = require('gulp-zip'),
+			        assets_incremental_update = require('gulp-assets-incremental-update');
+			   	gulp.src(config.assets_folder+'/**')
+			        .pipe(zip(config.name))
+			        .pipe(gulp.dest(config.publish_folder+'/'+version))
+			        .pipe(incremental_update({
+			            publish_folder : config.publish_folder,
+			            name : config.name,
+			            version : version,
+			            limit : config.limit
+			        }));
+			});
+		})(config);
+	}
 }
 
 
