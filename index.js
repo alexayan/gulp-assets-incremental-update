@@ -84,14 +84,16 @@ function genVersion(config_path, name, base_url){
     	config = {
     		file_name : name,
     		cur_version : 1,
-    		Last_version : 0,
+    		last_version : 0,
     		test_version : 1,
+    		Last_version : 0,
     		base_url : base_url
     	};
     }
+    config.last_version++;
     config.Last_version++;
     fs.writeFileSync(config_path, JSON.stringify(config));
-    return config.Last_version;
+    return config.last_version;
 }
 
 function assets_incremental_update(gulp, configs){
