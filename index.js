@@ -28,12 +28,15 @@ function incremental_update(options){
 	                          fs.mkdirSync(path.dirname(tasks[i][2]));
 	                        }
 	                        var output = fs.createWriteStream(tasks[i][2]);
+	                        output.on('finish', function(){
+	                        	gutil.log('gulp-assets-incremental-update: ' + 'success build patch '+tasks[i][2]);
+	                        	console.log(i, len-1);
+	                        	if(i===len-1){
+		                        	me.push(file);
+									cb();
+		                        }
+	                        });
 	                        archive.pipe(output);
-	                        gutil.log('gulp-assets-incremental-update: ' + 'success build patch '+tasks[i][2]);
-	                        if(i===len-1){
-	                        	this.push(file);
-								cb();
-	                        }
 	                    });
 					}
 				})(i));
@@ -103,7 +106,7 @@ function assets_incremental_update(gulp, configs){
 				throw new Error('must provide publish_folder, name, assets_folder, base_url in config options');
 			}
 			var config_path = path.resolve(config.publish_folder, './config.json');
-			gulp.task(config.task_name || 'assets-incremental-update', function(){
+			gulp.task(config.task_name || 'assets-incremental-update', function(cb){
 				var version = genVersion(config_path, config.name, config.base_url);
 			    var zip = require('gulp-zip'),
 			        assets_incremental_update = require('gulp-assets-incremental-update');
