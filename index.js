@@ -124,5 +124,6 @@ function assets_incremental_update(gulp, configs){
 	}
 }
 
+assets_incremental_update.incremental_update = incremental_update;
 
 module.exports = assets_incremental_update;
