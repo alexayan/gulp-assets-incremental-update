@@ -1,6 +1,6 @@
 {
   "name": "gulp-assets-incremental-update",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A gulp plugin for assets incremental update.",
   "keywords": [
     "gulpplugin",

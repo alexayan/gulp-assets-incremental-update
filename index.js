@@ -80,11 +80,12 @@ function genVersion(config_path, name, base_url){
             encoding : 'utf8'
         });
         config = JSON.parse(content);
+        config.last_version = config.Last_version;
     }else{
     	config = {
     		file_name : name,
     		cur_version : 1,
-    		last_version : 0,
+    		last_version : 1,
     		test_version : 1,
     		Last_version : 0,
     		base_url : base_url
