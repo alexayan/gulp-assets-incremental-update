@@ -23,7 +23,7 @@ function incremental_update(options){
 			for(var i=0, len=tasks.length; i<len; i++){
 				q_tasks.push((function(i){
 					return function(){
-						return diff.diff(tasks[i][0], tasks[i][1]).then(function(archive){
+						return diff.diff(tasks[i][0], tasks[i][1], {bsdiff : options.bsdiff}).then(function(archive){
 	                        if(!fs.existsSync(path.dirname(tasks[i][2]))){
 	                          fs.mkdirSync(path.dirname(tasks[i][2]));
 	                        }
@@ -120,7 +120,8 @@ function assets_incremental_update(gulp, configs){
 			            publish_folder : config.publish_folder,
 			            name : config.name,
 			            version : version,
-			            limit : config.limit
+			            limit : config.limit,
+			            bsdiff : config.bsdiff || false
 			        }));
 			});
 		})(config);
