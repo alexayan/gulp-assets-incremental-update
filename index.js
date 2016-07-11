@@ -85,7 +85,7 @@ function genVersion(config_path, name, base_url){
     	config = {
     		file_name : name,
     		cur_version : 1,
-    		last_version : 1,
+    		last_version : 0,
     		test_version : 1,
     		Last_version : 0,
     		base_url : base_url
