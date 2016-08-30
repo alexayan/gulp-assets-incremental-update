@@ -41,6 +41,9 @@ function incremental_update(options){
 					}
 				})(i));
 			}
+			if(q_tasks.length===0){
+				return cb();
+			}
 			q_tasks.reduce(function (soFar, f) {
 			    return soFar.then(f);
 			}, Q());
