@@ -29,6 +29,7 @@ function incremental_update(options){
 	                        }
 	                        var output = fs.createWriteStream(tasks[i][2]);
 	                        output.on('finish', function(){
+	                        	options.onBuildSuccess && options.onBuildSuccess(tasks[i][2]);
 	                        	gutil.log('gulp-assets-incremental-update: ' + 'success build patch '+tasks[i][2]);
 	                        	console.log(i, len-1);
 	                        	if(i===len-1){
@@ -124,7 +125,8 @@ function assets_incremental_update(gulp, configs){
 			            name : config.name,
 			            version : version,
 			            limit : config.limit,
-			            bsdiff : config.bsdiff || false
+			            bsdiff : config.bsdiff || false,
+			            onBuildSuccess : config.onBuildSuccess
 			        }));
 			});
 		})(config);
