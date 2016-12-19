@@ -38,6 +38,8 @@ function incremental_update(options){
 		                        }
 	                        });
 	                        archive.pipe(output);
+	                    }, function(e){
+	                    	cb(e);
 	                    });
 					}
 				})(i));
@@ -52,7 +54,7 @@ function incremental_update(options){
 			gutil.log('gulp-assets-incremental-update: ' + e.message);
 			this.emit('error', new gutil.PluginError('gulp-assets-incremental-update', e.message));
       		this.push(file);
-      		cb();
+      		cb(e);
 		}
 	});
 }
